@@ -1,0 +1,18 @@
+setwd("C:/Users/ssculley/Desktop/data/exdata_data_household_power")
+
+try1 <- read.table(file="household_power_consumption.txt", sep=";", header=TRUE, na.strings="?")
+try1$Date <- as.Date(try1$Date, format="%d/%m/%Y")
+mini <- subset(try1,subset=(Date > "2007-01-31 23:59:59" & Date < "2007-02-03 00:00:00"))
+
+datetime <- paste(as.Date(mini$Date), mini$Time)
+mini$time2 <- as.POSIXct(datetime)
+power <- as.numeric(mini$Global_active_power)
+sub1 <- as.numeric(mini$Sub_metering_1)
+sub2 <- as.numeric(mini$Sub_metering_2)
+sub3 <- as.numeric(mini$Sub_metering_3)
+png("plot3.png", width=480, height=480)
+plot(mini$time2, sub1, type="l", ylab="Energy Sub metering", xlab="")
+lines(mini$time2, sub2, type="l", col="red")
+lines(mini$time2, sub3, type="l", col="blue")
+legend("topright", c("Sub_metering_1", "Sub_metering_2", "Sub_metering_3"), lty=1, lwd=2, col=c("black", "red", "blue"))
+dev.off()
